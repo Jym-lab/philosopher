@@ -35,8 +35,6 @@ int	philo_eat(t_philo *philo)
 		philo->limit = philo->last_eat + philo->info->argv[TIME_TO_DIE];
 		print_msg(philo, TYPE_EAT);
 		ft_sleep(philo->info->argv[TIME_TO_EAT]);
-		if (philo->info->is_died == 1)
-			return (1);
 		philo->eat_count++;
 		philo->is_eating = 0;
 		pthread_mutex_unlock(&philo->mutex);

@@ -29,7 +29,7 @@ static char	*get_message(int type)
 	else if (type == TYPE_THINK)
 		return (" is thinking\n");
 	else if (type == TYPE_OVER)
-		return (" must eat count reached\n");
+		return ("must eat count reached\n");
 	return (" died\n");
 }
 
