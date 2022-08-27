@@ -81,12 +81,15 @@ int	argv_init(t_info *info, int ac, char **av)
 	info->argv[TIME_TO_SLEEP] = ft_atoi(av[4]);
 	info->forks_m = NULL;
 	info->philos = NULL;
+	info->is_died = 0;
 	if (ac == 6)
 		info->argv[MUST_EAT] = ft_atoi(av[5]);
 	else
 		info->argv[MUST_EAT] = 0;
 	if (info->argv[NUM_OF_PHILO] < 1
-		|| (ac == 6 && info->argv[MUST_EAT] <= 0))
+		|| (ac == 6 && info->argv[MUST_EAT] <= 0)
+		|| info->argv[TIME_TO_DIE] <= 0 || info->argv[TIME_TO_EAT] <= 0
+		|| info->argv[TIME_TO_SLEEP] <= 0)
 		return (1);
 	info->philos = malloc(sizeof(t_philo) * info->argv[NUM_OF_PHILO]);
 	if (!info->philos)

@@ -12,34 +12,51 @@
 
 #include "../include/philo.h"
 
-void	take_forks(t_philo *philo)
+int	take_forks(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->info->forks_m[philo->forks[LEFT]]);
-	print_msg(philo, TYPE_FORK);
-	pthread_mutex_lock(&philo->info->forks_m[philo->forks[RIGHT]]);
-	print_msg(philo, TYPE_FORK);
+	if (philo->info->is_died == 0)
+	{
+		pthread_mutex_lock(&philo->info->forks_m[philo->forks[LEFT]]);
+		print_msg(philo, TYPE_FORK);
+		pthread_mutex_lock(&philo->info->forks_m[philo->forks[RIGHT]]);
+		print_msg(philo, TYPE_FORK);
+		return (0);
+	}
+	return (1);
 }
 
-void	philo_eat(t_philo *philo)
+int	philo_eat(t_philo *philo)
 {
-	pthread_mutex_lock(&philo->mutex);
-	philo->is_eating = 1;
-	philo->last_eat = get_time();
-	philo->limit = philo->last_eat + philo->info->argv[TIME_TO_DIE];
-	print_msg(philo, TYPE_EAT);
-	ft_sleep(philo->info->argv[TIME_TO_EAT]);
-	philo->eat_count++;
-	philo->is_eating = 0;
-	pthread_mutex_unlock(&philo->mutex);
-	pthread_mutex_unlock(&philo->eat_mutex);
+	if (philo->info->is_died == 0)
+	{
+		pthread_mutex_lock(&philo->mutex);
+		philo->is_eating = 1;
+		philo->last_eat = get_time();
+		philo->limit = philo->last_eat + philo->info->argv[TIME_TO_DIE];
+		print_msg(philo, TYPE_EAT);
+		ft_sleep(philo->info->argv[TIME_TO_EAT]);
+		if (philo->info->is_died == 1)
+			return (1);
+		philo->eat_count++;
+		philo->is_eating = 0;
+		pthread_mutex_unlock(&philo->mutex);
+		pthread_mutex_unlock(&philo->eat_mutex);
+		return (0);
+	}
+	return (1);
 }
 
-void	philo_sleep(t_philo *philo)
+int	philo_sleep(t_philo *philo)
 {
-	print_msg(philo, TYPE_SLEEP);
-	pthread_mutex_unlock(&philo->info->forks_m[philo->forks[LEFT]]);
-	pthread_mutex_unlock(&philo->info->forks_m[philo->forks[RIGHT]]);
-	ft_sleep(philo->info->argv[TIME_TO_SLEEP]);
+	if (philo->info->is_died == 0)
+	{
+		print_msg(philo, TYPE_SLEEP);
+		pthread_mutex_unlock(&philo->info->forks_m[philo->forks[LEFT]]);
+		pthread_mutex_unlock(&philo->info->forks_m[philo->forks[RIGHT]]);
+		ft_sleep(philo->info->argv[TIME_TO_SLEEP]);
+		return (0);
+	}
+	return (1);
 }
 
 void	clear_info(t_info *info)

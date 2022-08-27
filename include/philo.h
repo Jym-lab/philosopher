@@ -50,6 +50,7 @@ typedef struct s_philo
 typedef struct s_info
 {
 	int				argv[5];
+	int				is_died;
 	time_t			start;
 	t_philo			*philos;
 	pthread_mutex_t	*forks_m;
@@ -60,12 +61,12 @@ typedef struct s_info
 void	err_msg(char *msg);
 void	print_msg(t_philo *philo, int type);
 void	ft_sleep(int ms);
-void	take_forks(t_philo *philo);
-void	philo_eat(t_philo *philo);
-void	philo_sleep(t_philo *philo);
 void	clear_info(t_info *info);
 void	clear_forks(t_info *info);
 
+int		take_forks(t_philo *philo);
+int		philo_eat(t_philo *philo);
+int		philo_sleep(t_philo *philo);
 int		argv_init(t_info *info, int ac, char **av);
 
 time_t	get_time(void);

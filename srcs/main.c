@@ -43,6 +43,8 @@ static void	*monitor(void *philo_v)
 		if (!philo->is_eating && get_time() > philo->limit)
 		{
 			print_msg(philo, TYPE_DIED);
+			if (philo->info->is_died == 0)
+				philo->info->is_died = 1;
 			pthread_mutex_unlock(&philo->mutex);
 			pthread_mutex_unlock(&philo->info->dead_m);
 			return ((void *)0);
@@ -67,9 +69,12 @@ static void	*routine(void *philo_v)
 	{
 		if (philo->info->argv[NUM_OF_PHILO] > 1)
 		{
-			take_forks(philo);
-			philo_eat(philo);
-			philo_sleep(philo);
+			if (take_forks(philo))
+				break ;
+			if (philo_eat(philo))
+				break ;
+			if (philo_sleep(philo))
+				break ;
 		}
 		else
 			ft_sleep(100);
@@ -117,5 +122,6 @@ int	main(int ac, char **av)
 	pthread_mutex_lock(&info.dead_m);
 	pthread_mutex_unlock(&info.dead_m);
 	clear_info(&info);
+	ft_sleep(100);
 	return (0);
 }
